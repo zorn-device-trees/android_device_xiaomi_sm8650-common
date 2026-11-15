@@ -98,6 +98,14 @@ void vendor_load_properties() {
             set_ro_build_prop("model", "2405CPX3DG");
             set_ro_build_prop("name", "ruyi_global");
         }
+    } else if (sku == "zorn") { // POCO F7 Pro / Redmi K80
+        if (region == "CN") { // China
+            set_ro_build_prop("model", "24117RK2CC");
+            set_ro_build_prop("name", "zorn");
+        } else {              // Global
+            set_ro_build_prop("model", "24117RK2CG");
+            set_ro_build_prop("name", "zorn_global");
+        }
     }  else if (sku == "goku") { // Xiaomi Fold 4
         if (region == "CN") { // China
             set_ro_build_prop("model", "24072PX77C");
