@@ -101,9 +101,7 @@ vendor/lib64/vendor.qti.voiceprint@1.0.so
 
 # Audio (Config)
 odm/etc/audio/sku_pineapple/adsp_sleep_monitor.conf
-odm/etc/audio/sku_pineapple/audio_effects.xml
 odm/etc/audio/sku_pineapple/mixer_paths_overlay_dynamic.xml
-odm/etc/audio/sku_pineapple_qssi/audio_effects.xml
 odm/etc/audio/sku_pineapple_qssi/audio_policy_configuration.xml
 odm/etc/usecaseKvManager.xml
 vendor/etc/audio/sku_pineapple/adsp_sleep_monitor.conf
