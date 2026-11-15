@@ -6,6 +6,8 @@
 
 import extract_utils.tools
 from extract_utils.fixups_blob import (
+    BlobFixupCtx,
+    File,
     blob_fixup,
     blob_fixups_user_type,
 )
@@ -18,6 +20,12 @@ from extract_utils.main import (
     ExtractUtils,
     ExtractUtilsModule,
 )
+from extract_utils.tools import (
+    llvm_objdump_path,
+)
+from extract_utils.utils import (
+    run_cmd,
+)
 
 namespace_imports = [
     'device/xiaomi/sm8650-common',
@@ -28,6 +36,29 @@ namespace_imports = [
     'vendor/qcom/opensource/commonsys-intf/display',
     'vendor/qcom/opensource/dataservices',
 ]
+
+def blob_fixup_graphic_buffer_size(
+    ctx: BlobFixupCtx,
+    file: File,
+    file_path: str,
+    disassemble_symbols: [str] = None,
+    *args,
+    **kwargs,
+):
+    cmd = [llvm_objdump_path, '-d', file_path]
+    if disassemble_symbols:
+        cmd.append(f'--disassemble-symbols={",".join(disassemble_symbols)}')
+    for line in run_cmd(cmd).splitlines():
+        line = line.split(maxsplit=5)
+        if len(line) != 6:
+            continue
+
+        # The size of GraphicBuffer changed from 0x100 to 0xd30
+        offset, _, instruction, register, value, _ = line
+        if instruction == 'mov' and register[:-1] == 'w0' and value == '#0x100':
+            with open(file_path, 'rb+') as f:
+                f.seek(int(offset[:-1], 16))
+                f.write(b'\x00\xa6\x81\x52')  # AArch64 mov w0, #0xd30
 
 def lib_fixup_vendor_suffix(lib: str, partition: str, *args, **kwargs):
     return f'{lib}-{partition}' if partition == 'vendor' else None
@@ -110,6 +141,14 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/lib64/libpowercore.so',
     ): blob_fixup()
         .replace_needed('libtinyxml2.so', 'libtinyxml2-v34.so'),
+    'odm/lib64/libframecapturemanager.so': blob_fixup()
+        .call(
+            blob_fixup_graphic_buffer_size,
+            [
+                '_ZN7android18DisplayDumpManager8InitAidlEv',
+                '_ZN7android18DisplayDumpManager8InitHidlEv',
+            ],
+        ),
     'vendor/etc/seccomp_policy/atfwd@2.0.policy': blob_fixup()
         .add_line_if_missing('lseek: 1'),
     (
