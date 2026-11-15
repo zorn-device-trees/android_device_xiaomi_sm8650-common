@@ -191,6 +191,7 @@ vendor.fastrpc.disable.cdsprpcd.daemon=1
 
 # Chipset
 ro.soc.manufacturer=QTI
+ro.soc.model=SM8650
 
 # Display
 ro.vendor.displayfeature.dump=true
