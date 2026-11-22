@@ -20,3 +20,11 @@ allow vendor_wcnss_service vendor_modem_data_file:dir { add_name getattr open re
 allow vendor_wcnss_service vendor_modem_data_file:file { append create getattr open read rename setattr unlink write };
 
 get_prop(vendor_wcnss_service, vendor_radio_prop)
+
+# wlan_mac_provision: atomic temp-file + rename write of persist/wlan/wlan_mac.bin
+allow vendor_wcnss_service mnt_vendor_file:dir { getattr open remove_name };
+allow vendor_wcnss_service mnt_vendor_file:file { getattr rename unlink };
+
+# Match stock: nv_mac reads (and fixes the mode of) the BT NV file in persist/bluetooth
+allow vendor_wcnss_service vendor_persist_bluetooth_file:dir { read getattr setattr open search };
+allow vendor_wcnss_service vendor_persist_bluetooth_file:file { read getattr setattr open };

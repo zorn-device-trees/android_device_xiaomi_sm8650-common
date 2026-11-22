@@ -1,0 +1,14 @@
+# nv_mac reads the factory Wi-Fi MAC from modem NV into
+# /data/vendor/mac_addr/wlan.mac but never creates the persist wlan_mac.bin
+# that the WLAN driver loads, so the driver falls back to a random address.
+# Persist it once nv_mac has finished. The driver probes at early-init, so a
+# newly written file takes effect from the next boot.
+service vendor.wlan_mac_provision /vendor/bin/wlan_mac_provision
+    class late_start
+    user system
+    group system wifi
+    oneshot
+    disabled
+
+on property:init.svc.vendor.nv_mac=stopped
+    start vendor.wlan_mac_provision

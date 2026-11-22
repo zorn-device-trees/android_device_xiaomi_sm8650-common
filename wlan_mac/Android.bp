@@ -1,0 +1,19 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+
+cc_binary {
+    name: "wlan_mac_provision",
+    vendor: true,
+
+    init_rc: ["wlan_mac_provision.rc"],
+
+    srcs: ["wlan_mac_provision.cpp"],
+
+    shared_libs: ["liblog"],
+
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ],
+}

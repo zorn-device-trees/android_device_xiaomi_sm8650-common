@@ -221,6 +221,7 @@ PRODUCT_PACKAGES += \
     init.qcom.usb.rc \
     init.qcom.usb.sh \
     init.target.rc \
+    wlan_mac_provision \
     ueventd.qcom.rc
 
 PRODUCT_COPY_FILES += \
