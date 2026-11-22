@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/turbo_title">
+
+    <com.android.settingslib.widget.MainSwitchPreference
+        android:key="turbo_enabled"
+        android:title="@string/turbo_enable" />
+
+    <Preference
+        android:key="turbo_status"
+        android:selectable="false" />
+
+    <ListPreference
+        android:key="turbo_current"
+        android:dependency="turbo_enabled"
+        android:title="@string/turbo_current_title"
+        android:entries="@array/turbo_current_entries"
+        android:entryValues="@array/turbo_current_values"
+        android:defaultValue="@string/turbo_current_default"
+        android:summary="%s" />
+
+    <ListPreference
+        android:key="turbo_temp_limit"
+        android:dependency="turbo_enabled"
+        android:title="@string/turbo_temp_title"
+        android:entries="@array/turbo_temp_entries"
+        android:entryValues="@array/turbo_temp_values"
+        android:defaultValue="@string/turbo_temp_default"
+        android:summary="%s" />
+
+    <SwitchPreferenceCompat
+        android:key="turbo_sport_mode"
+        android:dependency="turbo_enabled"
+        android:title="@string/turbo_sport_mode_title"
+        android:summary="@string/turbo_sport_mode_summary"
+        android:defaultValue="false" />
+
+    <com.android.settingslib.widget.FooterPreference
+        android:key="turbo_footer"
+        android:title="@string/turbo_footer"
+        android:selectable="false" />
+
+</PreferenceScreen>

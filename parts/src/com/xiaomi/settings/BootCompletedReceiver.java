@@ -13,6 +13,9 @@ import android.os.UserHandle;
 import android.util.Log;
 
 import com.xiaomi.settings.display.ColorModeService;
+import com.xiaomi.settings.edgesuppression.EdgeSuppressionService;
+import com.xiaomi.settings.thermal.ThermalUtils;
+import com.xiaomi.settings.turbocharging.TurboChargingService;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
     private static final String TAG = "XiaomiParts";
@@ -28,6 +31,17 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
         // Start the display color mode service
         context.startServiceAsUser(new Intent(context, ColorModeService.class),
+                UserHandle.CURRENT);
+
+        // Touch firmware rotation and edge suppression
+        context.startServiceAsUser(new Intent(context, EdgeSuppressionService.class),
+                UserHandle.CURRENT);
+
+        // Per-app thermal profiles (only starts when enabled)
+        ThermalUtils.getInstance(context).startService();
+
+        // Turbo charging (idles unless enabled and plugged in)
+        context.startServiceAsUser(new Intent(context, TurboChargingService.class),
                 UserHandle.CURRENT);
     }
 }

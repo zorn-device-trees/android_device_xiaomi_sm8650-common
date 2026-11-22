@@ -18,3 +18,14 @@ binder_call(system_app, vendor_hal_displayfeature_xiaomi_default)
 
 # Thermal
 get_prop(system_app, vendor_thermal_normal_prop)
+
+# XiaomiParts: thermal profiles
+allow system_app sysfs_thermal:dir search;
+allow system_app sysfs_thermal:file rw_file_perms;
+
+# XiaomiParts: turbo charging
+allow system_app vendor_sysfs_battery_supply:dir search;
+allow system_app vendor_sysfs_battery_supply:file rw_file_perms;
+
+# XiaomiParts: touch feature (edge suppression, display rotation)
+allow system_app hal_touchfeature_xiaomi_service:service_manager find;

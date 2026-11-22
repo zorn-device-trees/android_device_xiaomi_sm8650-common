@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Thermal profiles: sconfig value written to /sys/class/thermal/thermal_message/sconfig
+         for each profile, in the order default, benchmark, browser, camera, dialer, gaming,
+         navigation, streaming, video. Values come from vendor/etc/thermal-map.conf
+         (zorn: 0 normal, 6 nolimits, 7 class0, 15 camera, 5 phone, 19 mgame,
+         10 navigation, 14 videochat, 11 video). -->
+    <integer-array name="thermal_profile_sconfig" translatable="false">
+        <item>0</item>
+        <item>6</item>
+        <item>7</item>
+        <item>15</item>
+        <item>5</item>
+        <item>19</item>
+        <item>10</item>
+        <item>14</item>
+        <item>11</item>
+    </integer-array>
+
+    <!-- Turbo charging: selectable FCC floors in uA. 15.6 A is the highest limit the
+         stock thermal configuration ever allows. -->
+    <string-array name="turbo_current_entries" translatable="false">
+        <item>8 A</item>
+        <item>10 A</item>
+        <item>12.5 A</item>
+        <item>15.6 A</item>
+    </string-array>
+    <string-array name="turbo_current_values" translatable="false">
+        <item>8000000</item>
+        <item>10000000</item>
+        <item>12500000</item>
+        <item>15600000</item>
+    </string-array>
+    <string name="turbo_current_default" translatable="false">12500000</string>
+
+    <!-- Turbo charging: battery temperature cutoffs in tenths of a degree C. -->
+    <string-array name="turbo_temp_entries" translatable="false">
+        <item>40 °C</item>
+        <item>42 °C</item>
+        <item>44 °C</item>
+    </string-array>
+    <string-array name="turbo_temp_values" translatable="false">
+        <item>400</item>
+        <item>420</item>
+        <item>440</item>
+    </string-array>
+    <string name="turbo_temp_default" translatable="false">420</string>
+
+    <!-- Edge suppression, in physical display pixels -->
+    <integer name="edge_suppression_absolute_width">0</integer>
+    <integer name="edge_suppression_condition_default">30</integer>
+    <integer name="edge_suppression_condition_max">80</integer>
+    <!-- Corner sizes: portrait width, portrait height, landscape width, landscape height -->
+    <integer-array name="edge_suppression_corner" translatable="false">
+        <item>150</item>
+        <item>300</item>
+        <item>170</item>
+        <item>170</item>
+    </integer-array>
+    <color name="edge_suppression_preview_color">#33ff0000</color>
+</resources>

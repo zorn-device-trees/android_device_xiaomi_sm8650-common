@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/thermal_title">
+
+    <com.android.settingslib.widget.MainSwitchPreference
+        android:key="thermal_enabled"
+        android:title="@string/thermal_enable" />
+
+    <PreferenceCategory
+        android:key="thermal_apps"
+        android:title="@string/thermal_apps_category" />
+
+    <com.android.settingslib.widget.FooterPreference
+        android:key="thermal_footer"
+        android:title="@string/thermal_footer"
+        android:selectable="false" />
+
+</PreferenceScreen>

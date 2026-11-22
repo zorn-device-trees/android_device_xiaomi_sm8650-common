@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Thermal profiles -->
+    <string name="thermal_title">Thermal profiles</string>
+    <string name="thermal_summary">Per-app thermal profile configuration</string>
+    <string name="thermal_enable">Use thermal profiles</string>
+    <string name="thermal_apps_category">Apps</string>
+    <string name="thermal_footer">Apps without a manual choice get a profile from their category (games, video, maps, browser, dialer, camera). The default profile is used while the screen is off.</string>
+    <string name="thermal_auto">Automatic (%1$s)</string>
+    <string name="thermal_default">Default</string>
+    <string name="thermal_benchmark">Benchmark</string>
+    <string name="thermal_browser">Browser</string>
+    <string name="thermal_camera">Camera</string>
+    <string name="thermal_dialer">Dialer</string>
+    <string name="thermal_gaming">Gaming</string>
+    <string name="thermal_navigation">Navigation</string>
+    <string name="thermal_streaming">Video calls</string>
+    <string name="thermal_video">Video</string>
+
+    <!-- Turbo charging -->
+    <string name="turbo_title">Turbo charging</string>
+    <string name="turbo_summary">Raise the thermal charging current limit</string>
+    <string name="turbo_enable">Use turbo charging</string>
+    <string name="turbo_current_title">Charging current floor</string>
+    <string name="turbo_temp_title">Battery temperature cutoff</string>
+    <string name="turbo_sport_mode_title">Sport mode</string>
+    <string name="turbo_sport_mode_summary">Set the Xiaomi charger sport mode flag while plugged in</string>
+    <string name="turbo_footer">While charging, the thermal daemon lowers the charging current as the phone warms up. Turbo charging keeps the current at or above the selected value until the battery reaches the cutoff temperature, then hands control back to the thermal daemon. The phone will run warmer while charging.</string>
+    <string name="turbo_status_idle">Not charging</string>
+    <string name="turbo_status_active">Active: %1$s current limit, battery %2$s</string>
+    <string name="turbo_status_hot">Paused: battery %1$s is above the cutoff</string>
+    <string name="turbo_status_disabled">Off: the thermal daemon controls the current</string>
+
+    <!-- Edge suppression -->
+    <string name="edgesuppression_title">Edge rejection</string>
+    <string name="edgesuppression_summary">Ignore accidental touches along the screen edges</string>
+    <string name="edgesuppression_enable">Use edge rejection</string>
+    <string name="edgesuppression_width_title">Rejection width</string>
+</resources>
