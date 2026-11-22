@@ -8,7 +8,8 @@ on boot
     chown system system /sys/class/qcom-haptics/mi_custom_vmax_ctrl
     chmod 0660 /sys/class/qcom-haptics/mi_vmax_ctrl
     chmod 0660 /sys/class/qcom-haptics/mi_custom_vmax_ctrl
-    write /sys/class/qcom-haptics/mi_vmax_ctrl 2500
+    # 2500 mV over-drives the LRA at full strength (rattling); DT default is 1400
+    write /sys/class/qcom-haptics/mi_vmax_ctrl 1900
     write /sys/class/qcom-haptics/mi_custom_vmax_ctrl 2500
 
     # Xiaomi touch

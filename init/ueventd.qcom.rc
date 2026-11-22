@@ -329,6 +329,8 @@ subsystem mem_buf_vm
 /sys/class/qcom-battery  night_charging  0660    system  system
 /sys/class/qcom-battery  reverse_chg_mode  0644    system  system
 /sys/class/qcom-battery  fastcharge_enable  0660    system  system
+/sys/class/qcom-battery  sport_mode  0660    system  system
+/sys/class/power_supply/battery  constant_charge_current  0664    system  system
 
 # Broadcast devices
 /dev/tsc_mux0             0660   media       media
