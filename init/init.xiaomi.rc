@@ -8,9 +8,12 @@ on boot
     chown system system /sys/class/qcom-haptics/mi_custom_vmax_ctrl
     chmod 0660 /sys/class/qcom-haptics/mi_vmax_ctrl
     chmod 0660 /sys/class/qcom-haptics/mi_custom_vmax_ctrl
-    # 2500 mV over-drives the LRA at full strength (rattling); DT default is 1400
-    write /sys/class/qcom-haptics/mi_vmax_ctrl 1900
-    write /sys/class/qcom-haptics/mi_custom_vmax_ctrl 2500
+    # mi_vmax_ctrl: constant/direct play (oneshot buzzes). 2500 mV rattles at full
+    # strength; 1400 (DT default) and 1900 were clean. DT f0-vmax is 2100.
+    # mi_custom_vmax_ctrl: FIFO effect stream (clicks/ticks/keyboard, ~10 ms taps).
+    # 8500 = DT/stock default; lower values make taps barely perceptible.
+    write /sys/class/qcom-haptics/mi_vmax_ctrl 2100
+    write /sys/class/qcom-haptics/mi_custom_vmax_ctrl 8500
 
     # Xiaomi touch
     chown system system /dev/xiaomi-touch
