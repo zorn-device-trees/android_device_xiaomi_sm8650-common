@@ -89,10 +89,16 @@ blob_fixups: blob_fixups_user_type = {
         .replace_needed('android.media.audio.common.types-V4-cpp.so', 'android.media.audio.common.types-V5-cpp.so'),
     (
         'vendor/bin/hw/vendor.qti.media.c2@1.0-service',
-        'vendor/bin/hw/vendor.dolby.media.c2@1.0-service',
         'vendor/bin/hw/vendor.qti.media.c2audio@1.0-service'
     ): blob_fixup()
         .add_needed('libshim.so'),
+    'vendor/bin/hw/vendor.dolby.media.c2@1.0-service': blob_fixup()
+        .add_needed('libshim.so')
+        # Blob allocates utils::ComponentStore with sizeof 0x108 (old headers),
+        # but the A15+ AOSP libcodec2_hidl@1.0 object is 0x120, so the ctor
+        # overflows the heap block and corrupts RefBase::mRefs.
+        # mov w0, #0x108 -> mov w0, #0x120
+        .binary_regex_replace(b'\x00\x21\x80\x52', b'\x00\x24\x80\x52'),
     (
         'vendor/etc/media_codecs_pinaepple.xml', 
         'vendor/etc/media_codecs_pinaepple_vendor.xml'
