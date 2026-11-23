@@ -1,0 +1,4 @@
+# MiuiCamera (com.android.camera) runs in the priv_app_36 domain.
+
+# Read persist.vendor.EnableP3ColorSpace (platform_app already has this)
+get_prop(priv_app_36, vendor_camera_p3enable_prop)

@@ -61,6 +61,14 @@ add_service(hal_camera_server, hal_quickcamera_service)
 hal_server_domain(hal_camera_default, vendor_hal_camerapostproc_xiaomi)
 add_hwservice(hal_camera_server, vendor_hal_camerapostproc_xiaomi_hwservice)
 
+# The camera provider registers IAlwaysOn/miaonservicehal (declared in the odm
+# vintf manifest); hal_camera_aon.te already grants add_service to the
+# hal_camera_aon_server attribute, which the provider domain was missing.
+hal_server_domain(hal_camera_default, hal_camera_aon)
+
+# Camera kernel CCI IO protection toggle written when sensors power up
+allow hal_camera_default vendor_sysfs_camera_cci:file { getattr open read write };
+
 # Allow /proc/stat accessing camera
 allow hal_camera_default proc_stat:file r_file_perms;
 
