@@ -1,0 +1,2 @@
+# init.qti.kernel.sh sets vm.page-cluster (0 for zram)
+allow vendor_qti_init_shell proc_page_cluster:file w_file_perms;

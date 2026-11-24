@@ -152,7 +152,10 @@ ro.hardware.fingerprint                         u:object_r:vendor_fp_prop:s0
 persist.vendor.fingerprint.                     u:object_r:vendor_fp_prop:s0
 persist.vendor.sys.fp.info                      u:object_r:vendor_fp_info_prop:s0
 vendor.fingerprint.                             u:object_r:vendor_fp_prop:s0
+vendor.panel.color                              u:object_r:vendor_fp_prop:s0
+vendor.panel.display                            u:object_r:vendor_fp_prop:s0
 vendor.panel.display.                           u:object_r:vendor_fp_prop:s0
+vendor.panel.vendor                             u:object_r:vendor_fp_prop:s0
 vendor.panel.touch_vendor                       u:object_r:vendor_fp_info_prop:s0
 
 # HVDCP

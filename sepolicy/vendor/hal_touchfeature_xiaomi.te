@@ -25,3 +25,7 @@ set_prop(hal_touchfeature_xiaomi_default, vendor_touchfeature_prop)
 set_prop(hal_touchfeature_xiaomi_default, vendor_touch_hostprocess_prop)
 
 vndbinder_use(hal_touchfeature_xiaomi)
+# SensorControl: use the framework HIDL ISensorManager (hosted by system_server)
+hwbinder_use(hal_touchfeature_xiaomi_default)
+allow hal_touchfeature_xiaomi_default fwk_sensor_hwservice:hwservice_manager find;
+binder_call(hal_touchfeature_xiaomi_default, system_server)

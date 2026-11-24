@@ -669,8 +669,9 @@ on property:ro.product.device=muyu && property:ro.vendor.ril.oem.psno=*
     setprop ro.ril.oem.psno ${ro.vendor.ril.oem.psno}
 
 #for online boot cpu
+# Our kernel's mi_thermal_interface has no boot_complete node; waiting on it
+# stalled init for 5s after boot. Write it only if present.
 on property:sys.boot_completed=1
-    wait /sys/class/thermal/thermal_message/boot_complete
     write /sys/class/thermal/thermal_message/boot_complete 2
 
 service gnss_service /odm/bin/hw/android.hardware.gnss-aidl-service-qti
