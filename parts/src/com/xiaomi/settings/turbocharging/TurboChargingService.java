@@ -28,9 +28,9 @@ import com.xiaomi.settings.utils.FileUtils;
  * mi_thermald caps charging by writing battery/constant_charge_current from a PID loop on
  * the board temperature. While a charger is connected and turbo charging is on, this
  * service polls the limit and raises it back to the floor whenever the thermal daemon
- * set it lower. It never lowers the limit. When the battery reaches the cutoff
- * temperature it stops writing until the battery cools by HYSTERESIS, and the thermal
- * daemon takes over again. The ADSP's own JEITA protection is not affected.
+ * set it lower. When the battery reaches the cutoff temperature, or the floor stops being
+ * enforced, it writes back the limit the thermal daemon last set and leaves it alone
+ * until the battery cools by HYSTERESIS. The ADSP's own JEITA protection is not affected.
  *
  * Polling runs on its own thread, since every poll does sysfs I/O. It uses uptime-based
  * delays, so it pauses while the system is suspended; mi_thermald is frozen then too, so
@@ -67,6 +67,10 @@ public class TurboChargingService extends Service
     // Bumped on every start/stop so a poll already in flight cannot keep the loop alive.
     private volatile int mPollGeneration;
     private boolean mSportModeSet;
+    // Last limit mi_thermald set before we raised it, or -1. Polling thread only.
+    private long mThermalFcc = -1;
+    // What the node read back as after our last write, or -1. Polling thread only.
+    private long mOwnFcc = -1;
 
     private final BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
         @Override
@@ -139,8 +143,13 @@ public class TurboChargingService extends Service
         boolean active = isEnabled(mPrefs) && mPlugged;
         if (active) {
             updateHot();
-            setSportMode(mPrefs.getBoolean(PREF_SPORT_MODE, false));
+            setSportMode(mPrefs.getBoolean(PREF_SPORT_MODE, false) && !sHot);
             startPolling();
+            if (sHot) {
+                // Don't wait for the next poll: with the screen off the device may suspend
+                // first, and mi_thermald won't rewrite the limit until its target changes.
+                mPollHandler.postAtFrontOfQueue(this::restoreThermalLimit);
+            }
         } else {
             stopPolling();
             setSportMode(false);
@@ -161,12 +170,38 @@ public class TurboChargingService extends Service
 
     private void enforceFloor() {
         updateHot();
-        if (sHot) return;
+        if (sHot) {
+            restoreThermalLimit();
+            return;
+        }
         long floor = getFloor(this, mPrefs);
         long current = FileUtils.readLong(FCC_NODE, -1);
         if (current >= 0 && current < floor) {
+            // The charger clamps the node to its own ceiling, which can be below the floor,
+            // so the value may be what our last write turned into. Only a different value
+            // came from mi_thermald; remember it so it can be put back when we stop.
+            if (current != mOwnFcc) {
+                mThermalFcc = current;
+            }
             FileUtils.writeLine(FCC_NODE, String.valueOf(floor));
+            mOwnFcc = FileUtils.readLong(FCC_NODE, -1);
         }
+    }
+
+    /**
+     * Puts back the limit mi_thermald last set before we raised it. mi_thermald only writes
+     * when its own target changes, so if we simply stopped writing, the raised floor would
+     * stay in effect even after the battery got hot. Runs on the polling thread.
+     */
+    private void restoreThermalLimit() {
+        mOwnFcc = -1;
+        if (mThermalFcc < 0) return;
+        long current = FileUtils.readLong(FCC_NODE, -1);
+        if (current < 0 || current > mThermalFcc) {
+            Log.i(TAG, "Restoring thermal limit " + mThermalFcc);
+            FileUtils.writeLine(FCC_NODE, String.valueOf(mThermalFcc));
+        }
+        mThermalFcc = -1;
     }
 
     private void startPolling() {
@@ -189,6 +224,7 @@ public class TurboChargingService extends Service
         mPolling = false;
         mPollGeneration++;
         mPollHandler.removeCallbacksAndMessages(null);
+        mPollHandler.post(this::restoreThermalLimit);
     }
 
     private void setSportMode(boolean enabled) {
